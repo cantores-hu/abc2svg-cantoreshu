@@ -40,6 +40,9 @@ The fork changes lyric layout for large, singable type.
 - When omitted hyphens join Hungarian doubled digraphs, the spelling is
   repaired: for example, `asz-szony` becomes `asszony`, while a hard hyphen
   preserves a compound such as `kulcs\\-cso-mó`.
+- With an `anno_start`/`anno_stop` hook set, a hyphen carried over to a line
+  that opens on a symbol without a syllable (a bar, a rest) no longer crashes
+  upstream's `out_ly()`; that carried hyphen is simply left unannotated.
 
 Hyphen appearance and behaviour are controlled by these fork-specific format
 parameters. Lengths and thickness are multiples of the lyric font size;

@@ -39,7 +39,8 @@ export function render(directives, tune, opts = {}) {
 	const abc = new sandbox.abc2svg.Abc({
 		img_out: (str) => { svg += str },
 		errmsg: (msg) => { if (opts.errors) opts.errors.push(msg) },
-		read_file: () => null
+		read_file: () => null,
+		...opts.user
 	})
 	abc.tosvg('test',
 		'%%pagewidth 642.52px\n%%pagescale 1\n'

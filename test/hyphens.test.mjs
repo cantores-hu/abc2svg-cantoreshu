@@ -14,7 +14,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { noteXs, syllables, syllableText } from './harness.mjs'
+import { noteXs, render, syllables, syllableText } from './harness.mjs'
 
 /**
  * The defaults of the five lengths, as core/format.js sets them: multiples of
@@ -460,4 +460,17 @@ test('a hard hyphen only keeps its own seam', () => {
 		'the hard first seam is kept')
 	assert.equal(seam('C D E', 24, 'Meg-vál\\-tó'), 'Megvál - tó',
 		'the hard second seam is kept')
+})
+
+test('a hyphen carried onto a line that opens with a bar survives annotation', () => {
+	const annotated = []
+	const errors = []
+	const { svg } = render('', 'X:1\nL:1/4\nK:C\nC D E F|G A B c|\nw:a b c d e f g ho-\n|c B A G|\nw:ly a b c\n', {
+		errors,
+		user: { anno_stop: (type, istart, iend) => { if (type == 'lyrics') annotated.push([istart, iend]) } }
+	})
+
+	assert.deepEqual(errors, [])
+	assert.match(svg, />ly</)
+	assert.equal(annotated.length, 12, 'every syllable is annotated once, the carried hyphen not at all')
 })

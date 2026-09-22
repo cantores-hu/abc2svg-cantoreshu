@@ -557,9 +557,14 @@ function draw_lyric_line(p_voice, j, y) {
 	hyflag = {}
 
 	// output a syllable
+	// (a hyphen carried over from the previous line starts at a symbol
+	//  that may have no syllable of its own - nothing to annotate then)
 	function out_ly(s, w, p) {
-		if (user.anno_start || user.anno_stop) {
-		    var	s2 = {
+		var	s2
+
+		if ((user.anno_start || user.anno_stop)
+		 && s.a_ly && s.a_ly[j]) {
+			s2 = {
 				p_v: s.p_v,
 				st: s.st,
 				istart: s.a_ly[j].istart,
@@ -576,7 +581,8 @@ function draw_lyric_line(p_voice, j, y) {
 			anno_start(s2, 'lyrics')
 		}
 		xy_str(lastx, y, p)
-		anno_stop(s2, 'lyrics')
+		if (s2)
+			anno_stop(s2, 'lyrics')
 	} // out_ly()
 
 	function set_hy(v) {
