@@ -177,7 +177,8 @@ var decos = {
 	cacc1: "3 cacc1 0 16 0",
 	"tie(": "44 0 0 0 0",
 	"tie)": "44 0 0 0 0",
-	fg: "45 0 0 0 0"},
+	fg: "45 0 0 0 0",
+	"head-small": "46 0 0 0 0"},
 
 	// types of decoration per function
 	f_near = [
@@ -731,7 +732,7 @@ function deco_def(nm, nmd) {
 		return //undefined
 	}
 	if (c_func > 11
-	 && (c_func < 32 || c_func > 45)) {
+	 && (c_func < 32 || c_func > 46)) {
 		error(1, null, "%%deco: bad C function index '$1'", c_func)
 		return //undefined
 	}
@@ -762,7 +763,9 @@ function deco_def(nm, nmd) {
 	}
 
 	/* set the values */
-	dd.func = nm.indexOf("head-") == 0 ? 9 : c_func;
+	dd.func = nm.indexOf("head-") == 0
+			&& c_func < 32		// (not an internal function)
+		? 9 : c_func;
 	dd.glyph = a[2];
 	dd.h = Number(h)
 	dd.hd = Number(hd)
@@ -1061,6 +1064,14 @@ function deco_cnv(s, prev) {
 		case 40:		/* stemless */
 			s.stemless = true
 			break
+		case 46:		// head-small
+			if (s.type != C.NOTE) {
+				error(1, s, errs.must_note, nm)
+				continue
+			}
+			for (j = 0; j <= s.nhd; j++)
+				s.notes[j].small = true
+			continue
 		case 41:		/* rbend */
 			s.rbstop = 2	// with end
 			break
@@ -1164,6 +1175,9 @@ function dh_cnv(s, nt) {
 			continue
 		case 44:		// cross-voice ties
 			do_ctie(nm, s, nt)
+			continue
+		case 46:		// head-small
+			nt.small = true
 			continue
 		}
 

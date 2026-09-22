@@ -1518,6 +1518,7 @@ function y_head(s, note) {
 // sets {x,y}_note
 function draw_basic_note(s, m, y_tb) {
     var	i, p, yy, dotx, doty, inv, head, dots, nflags,
+		sc = 1,			// head scale
 		old_color = false,
 		note = s.notes[m],
 		staffb = staff_tb[s.st].y,	/* bottom of staff */
@@ -1596,16 +1597,32 @@ function draw_basic_note(s, m, y_tb) {
 	if (note.color != undefined)
 		old_color = set_color(note.color)
 	if (p) {
-		if (s.grace || inv) {
+
+		// small head (!head-small!): shrink the head toward the stem,
+		// or toward its center when the note has no stem
+		if (note.small) {
+			sc = .7
+			if (!s.stemless && s.nflags > -2) {
+				i = s.stem >= 0 ? 1 : -1	// stem side
+				if (note.shhd != s.notes[s.stem < 0 ? s.nhd : 0].shhd)
+					i = -i		// head on the other side
+				x_note += (1 - sc)
+					* (s.grace ? GSTEM_XOFF : 3.5)
+					* i * stv_g.scale
+			}
+		}
+		if (s.grace || inv || sc != 1) {
 			if (s.grace)
-				g_open(x_note, y_note, 0, .66, 0)
+				g_open(x_note, y_note, 0, .66 * sc, 0)
+			else if (inv)
+				g_open(x_note, y_note, 0, sc, -sc)
 			else
-				g_open(x_note, y_note, 0, 1, -1)
+				g_open(x_note, y_note, 0, sc, 0)
 			x_note = y_note = 0
 		}
 		if (!self.psxygl(x_note, y_note, p))
 			xygl(x_note, y_note, p)
-		if (s.grace || inv)
+		if (s.grace || inv || sc != 1)
 			g_close()
 	}
 

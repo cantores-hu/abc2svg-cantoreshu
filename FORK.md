@@ -105,6 +105,30 @@ The module is linked into the core build, rather than loaded on demand. The
 directive only says how to read the input: the engraved spelling is Hungarian
 either way.
 
+## Small note heads
+
+`!head-small!` draws a note head at 70% of its size, the other notes of a
+chord and the stem, ledger lines, dots and accidentals keeping theirs. Written
+before a note inside a chord it applies to that note only; before the chord or
+a single note, to all its heads:
+
+```abc
+X:1
+L:1/4
+K:C
+[!head-small!CF] !head-small![ce] !head-small!G2|
+```
+
+The head is shrunk toward the stem, so that it meets the stem as a full head
+does, with the stem up or down and also when a second puts it on the other
+side of the stem; a head without a stem is shrunk toward its center. It works
+with every head shape, including those set by `%%map`. The decoration is
+refused on rests.
+
+The decoration is function 46 in `core/deco.js`, which flags the note; the
+head is drawn by `draw_basic_note()` in `core/draw.js`.
+`test/smallhead.test.mjs` covers it.
+
 ## Distribution and build
 
 - The package is published as `@cantoreshu/abc2svg`. It is a browser global,
@@ -113,8 +137,8 @@ either way.
   package version is maintained independently.
 - The build can minify with Node through `tools/jsmin-node.js` when neither
   `jsmin` nor QuickJS is available.
-- The fork adds a Node test harness and tests for lyrics, hyphens, and Hungarian
-  chord spelling. Run `npm test` to build and execute them.
+- The fork adds a Node test harness and tests for lyrics, hyphens, Hungarian
+  chord spelling, and small note heads. Run `npm test` to build and execute them.
 
 ## Repository maintenance
 
