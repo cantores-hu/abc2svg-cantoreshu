@@ -15,13 +15,13 @@
   "contributors": [
     "Jean-François Moine (abc2svg itself)"
   ],
-  "homepage": "https://github.com/briff/abc2svg-cantoreshu#readme",
+  "homepage": "https://github.com/cantores-hu/abc2svg-cantoreshu#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/briff/abc2svg-cantoreshu.git"
+    "url": "git+https://github.com/cantores-hu/abc2svg-cantoreshu.git"
   },
   "bugs": {
-    "url": "https://github.com/briff/abc2svg-cantoreshu/issues"
+    "url": "https://github.com/cantores-hu/abc2svg-cantoreshu/issues"
   },
   "upstream": {
     "project": "https://chiselapp.com/user/moinejf/repository/abc2svg",
